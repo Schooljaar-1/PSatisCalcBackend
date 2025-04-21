@@ -1,0 +1,6 @@
+@SCB.WebApi_HostAddress = http://localhost:5248
+
+GET {{SCB.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
