@@ -1,0 +1,12 @@
+[
+    {
+        "Name": "kaas",
+        "Version": "",
+        "Parts": 
+        [{
+            "partname": "melk",
+            "partAmmount": "132",
+            "PartVersion": "default"
+        }]
+    }
+]
