@@ -1,18 +1,17 @@
 [
     {
-        "name": "kaas",
+        "name": "Iron plate",
         "version": "default",
+        "machine": "constructor",
+        "amount": 1,
+        "type": "item",
         "parts": 
         [
             {
-                "partName": "melk",
-                "partAmount": "100",
-                "partVersion": "default"
-            },
-            {
-                "partName": "zout",
-                "partAmount": "20",
-                "partVersion": "default"
+                "partName": "Iron ingot",
+                "partVersion": "default",
+                "partType": "item",
+                "partAmount": 1.5
             }
         ]
     }

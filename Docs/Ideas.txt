@@ -1,0 +1,2 @@
+1. In front-end when adding new recipe, add function to convert it 1/pm. when you add the standard recipe for iron plates which uses 20pm, divide everything by 30 and then add it into the recipes.json
+	--> Figure out how to use clean fractions

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using SCB.WebApi.Services; 
 
 namespace SCB.WebApi.Controllers;
 
@@ -8,9 +7,11 @@ namespace SCB.WebApi.Controllers;
 
 public class RecipeController : ControllerBase
 {
+    RecipeDataService dataManipulator = new();
+
     [HttpGet(Name = "Testje321")]
-    public string GetRecipes()
+    public List<Recipe> GetRecipes()
     {
-        return "";
+        return dataManipulator.GetAllRecipes();
     }
 }
