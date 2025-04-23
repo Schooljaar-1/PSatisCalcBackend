@@ -8,9 +8,13 @@ namespace SCB.WebApi.Controllers;
 
 public class RecipeController : ControllerBase
 {
+    RecipeExtractor recipeExtractor = new();
+
+
     [HttpGet(Name = "Testje321")]
-    public List<Recipe> GetRecipes()
+    public string GetRecipes()
     {
-        return "321";
+        //Write a service function for this shit
+        return "";
     }
 }

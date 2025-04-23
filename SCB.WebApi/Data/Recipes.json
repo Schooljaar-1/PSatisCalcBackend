@@ -1,12 +1,19 @@
 [
     {
-        "Name": "kaas",
-        "Version": "",
-        "Parts": 
-        [{
-            "partname": "melk",
-            "partAmmount": "132",
-            "PartVersion": "default"
-        }]
+        "name": "kaas",
+        "version": "default",
+        "parts": 
+        [
+            {
+                "partName": "melk",
+                "partAmount": "100",
+                "partVersion": "default"
+            },
+            {
+                "partName": "zout",
+                "partAmount": "20",
+                "partVersion": "default"
+            }
+        ]
     }
 ]
