@@ -10,6 +10,7 @@ Welcome to the **SaticCalcBackend** repository! This project will serve as the b
 
 ## 🛠️ Tech Stack
 - ASP.NET core WebApi
+- React front-end
 - C#
 - JSON
 - Visual Studio (Code)
