@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{345729C1-B795-B0D7-7B29-F7BC84D8CE3F}|SCB.WebApi\\SCB.WebApi.csproj|d:\\coding\\avans\\jaar 1\\q4\\persoonlijke projecten\\psatiscalcbackend\\scb.webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{345729C1-B795-B0D7-7B29-F7BC84D8CE3F}|SCB.WebApi\\SCB.WebApi.csproj|solutionrelative:scb.webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{345729C1-B795-B0D7-7B29-F7BC84D8CE3F}|SCB.WebApi\\SCB.WebApi.csproj|d:\\coding\\avans\\jaar 1\\q4\\persoonlijke projecten\\psatiscalcbackend\\scb.webapi\\scb.webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{345729C1-B795-B0D7-7B29-F7BC84D8CE3F}|SCB.WebApi\\SCB.WebApi.csproj|solutionrelative:scb.webapi\\scb.webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{345729C1-B795-B0D7-7B29-F7BC84D8CE3F}|SCB.WebApi\\SCB.WebApi.csproj|d:\\coding\\avans\\jaar 1\\q4\\persoonlijke projecten\\psatiscalcbackend\\scb.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{345729C1-B795-B0D7-7B29-F7BC84D8CE3F}|SCB.WebApi\\SCB.WebApi.csproj|solutionrelative:scb.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\SCB.WebApi\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "SCB.WebApi\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\SCB.WebApi\\Properties\\launchSettings.json",
+              "RelativeToolTip": "SCB.WebApi\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-21T20:34:38.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SCB.WebApi",
+              "DocumentMoniker": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\SCB.WebApi\\SCB.WebApi.csproj",
+              "RelativeDocumentMoniker": "SCB.WebApi\\SCB.WebApi.csproj",
+              "ToolTip": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\SCB.WebApi\\SCB.WebApi.csproj",
+              "RelativeToolTip": "SCB.WebApi\\SCB.WebApi.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-04-21T20:30:12.674Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\SCB.WebApi\\Program.cs",
+              "RelativeDocumentMoniker": "SCB.WebApi\\Program.cs",
+              "ToolTip": "D:\\Coding\\Avans\\Jaar 1\\Q4\\Persoonlijke projecten\\PSatisCalcBackend\\SCB.WebApi\\Program.cs",
+              "RelativeToolTip": "SCB.WebApi\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:30:11.381Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

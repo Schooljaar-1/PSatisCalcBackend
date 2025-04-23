@@ -1,5 +1,5 @@
-//Handle recipe manipulation
 using Microsoft.AspNetCore.Mvc;
+using SCB.WebApi.Services; 
 
 namespace SCB.WebApi.Controllers;
 
@@ -8,13 +8,9 @@ namespace SCB.WebApi.Controllers;
 
 public class RecipeController : ControllerBase
 {
-    RecipeExtractor recipeExtractor = new();
-
-
     [HttpGet(Name = "Testje321")]
     public string GetRecipes()
     {
-        //Write a service function for this shit
         return "";
     }
 }

@@ -1,8 +1,7 @@
 using System.IO;
 using System.Text.Json;
 
-public class RecipeExtractor
-{
+public class RecipeExtractor{
     private static readonly string jsonPath = Path.Combine("Data", "Recipes.json");
 
     public List<Recipe> GetAllRecipes()
