@@ -7,11 +7,17 @@ namespace SCB.WebApi.Controllers;
 
 public class RecipeController : ControllerBase
 {
-    RecipeDataService dataManipulator = new();
+    RecipeDataService recipeDataService = new();
 
-    [HttpGet(Name = "Testje321")]
+    [HttpGet(Name = "Get all recipes")]
     public List<Recipe> GetRecipes()
     {
-        return dataManipulator.GetAllRecipes();
+        return recipeDataService.GetAllRecipes();
+    }
+
+    [HttpPost(Name = "Add new recipe")]
+    public void AddNewRecipe(Recipe newRecipe)
+    {
+        recipeDataService.AddNewRecipe(newRecipe);
     }
 }

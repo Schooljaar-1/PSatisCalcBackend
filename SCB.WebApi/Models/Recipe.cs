@@ -7,3 +7,14 @@ public class Recipe
     public required string Type {get; set;}
     public List<Parts>? Parts {get; set;}
 }
+public class Parts
+{
+    public required string PartName {get; set;}
+    public required Fraction Amount  {get; set;}
+}
+
+public class Fraction
+{
+    public required int Teller {get; set;}
+    public required int Noemer {get; set;}
+}
