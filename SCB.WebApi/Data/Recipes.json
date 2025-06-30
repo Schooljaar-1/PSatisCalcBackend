@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "Name": "Iron Plate",
+    "Version": "default",
+    "Machine": "constructor",
+    "Amount": 20,
+    "Type": "item",
+    "Parts": [
+      {
+        "PartName": "Iron ingot",
+        "Amount": {
+          "Teller": 30,
+          "Noemer": 1
+        }
+      }
+    ]
+  }
+]
