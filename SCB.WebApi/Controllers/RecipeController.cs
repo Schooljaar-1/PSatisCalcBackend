@@ -54,9 +54,18 @@ public class RecipeController : ControllerBase
     [HttpPost(Name = "Add new recipe")]
     public ActionResult AddNewRecipe(Recipe newRecipe)
     {
-        //TODO: Add checks like: Same name and version already exist? Everything filled in? Invalid fraction (/0)? etc.
-        if(recipeDataService.FindRecipeByNameAndVersion(newRecipe.Name, newRecipe.Version) is not null)
+        if (newRecipe is null || newRecipe.Parts == null || !newRecipe.Parts.Any())
+        {
+            return BadRequest("Recipe data is required and must contain at least one part.");
+        }
+        else if (newRecipe.Parts.Any(part => part.Amount == null || part.Amount.Teller == 0 || part.Amount.Noemer == 0))
+        {
+            return BadRequest("Each part must have a non-zero amount (numerator and denominator).");
+        }
+        else if (recipeDataService.FindRecipeByNameAndVersion(newRecipe.Name, newRecipe.Version) is not null)
+        {
             return BadRequest($"A recipe with name \"{newRecipe.Name}\" and version \"{newRecipe.Version}\" already exists.");
+        }
         else
         {
             recipeDataService.AddNewRecipe(newRecipe);
