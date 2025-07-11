@@ -33,7 +33,7 @@ public class FractionService
         return SimplifyFraction(afterAddition);
     }
 
-    public Fraction Subtraction (Fraction f1, Fraction f2)
+    public Fraction Subtraction(Fraction f1, Fraction f2)
     {
         EvenNoemer(f1, f2);
         Fraction afterSubtraction = new Fraction
@@ -57,7 +57,7 @@ public class FractionService
     {
         int a, b, temp;
 
-        if(fraction.Teller == fraction.Noemer)
+        if (fraction.Teller == fraction.Noemer)
         {
             return new Fraction
             {
@@ -65,7 +65,7 @@ public class FractionService
                 Noemer = 1
             };
         }
-        else if(fraction.Noemer > fraction.Teller)
+        else if (fraction.Noemer > fraction.Teller)
         {
             a = fraction.Noemer;
             b = fraction.Teller;
@@ -76,7 +76,7 @@ public class FractionService
             b = fraction.Noemer;
         }
 
-        while(b != 0)
+        while (b != 0)
         {
             temp = b;
             b = a % b;
@@ -88,4 +88,7 @@ public class FractionService
 
         return fraction;
     }
+
+    //TODO: write a function to take a recipe and return the 1 amount
+    //TODO: add XML comments to the functions
 }
