@@ -15,3 +15,4 @@ I started this project to improve my developer skills apart from school projects
 - C#
 - JavaScript
 - Visual Studio (Code)
+- HTML / CSS
