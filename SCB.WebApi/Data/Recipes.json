@@ -14,5 +14,44 @@
         }
       }
     ]
+  },
+  {
+    "Name": "Screw",
+    "Version": "default",
+    "Machine": "Constructor",
+    "Amount": 40,
+    "Type": "item",
+    "Parts": [
+      {
+        "PartName": "Iron Rod",
+        "Amount": {
+          "Teller": 10,
+          "Noemer": 1
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Reinforced Iron Plate",
+    "Version": "default",
+    "Machine": "Assembler",
+    "Amount": 5,
+    "Type": "item",
+    "Parts": [
+      {
+        "PartName": "Screw",
+        "Amount": {
+          "Teller": 60,
+          "Noemer": 1
+        }
+      },
+      {
+        "PartName": "Iron Plate",
+        "Amount": {
+          "Teller": 30,
+          "Noemer": 1
+        }
+      }
+    ]
   }
 ]
