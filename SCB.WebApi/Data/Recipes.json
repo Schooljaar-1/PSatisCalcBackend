@@ -2,7 +2,7 @@
   {
     "Name": "Iron Plate",
     "Version": "default",
-    "Machine": "constructor",
+    "Machine": "Constructor",
     "Amount": 20,
     "Type": "item",
     "Parts": [

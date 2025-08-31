@@ -5,7 +5,8 @@ public class Recipe
     public required string Machine {get; set;}
     public required decimal Amount { get; set;}
     public required string Type {get; set;}
-    public List<Parts>? Parts {get; set;}
+    public required string Image { get; set;}
+    public List<Parts>? Parts { get; set; }
 }
 public class Parts
 {
