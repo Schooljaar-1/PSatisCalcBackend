@@ -13,12 +13,16 @@ public class RecipeController : ControllerBase
     [HttpGet(Name = "Get all recipes")]
     public ActionResult<List<Recipe>> GetRecipes()
     {
-        var recipes = recipeDataService.GetAllRecipes();
-
-        if(recipes is null || !recipes.Any())
-            return NotFound("There are no recipes present.");
-        else
+        try
+        {
+            var recipes = recipeDataService.GetAllRecipes();
             return Ok(recipes);
+        }
+        catch
+        {
+            var errorMessage = new { error = "There are no recipes present." };
+            return NotFound(errorMessage);
+        }
     }
 
     [HttpGet("name/{name}", Name = "Get recipe by name")]
