@@ -14,7 +14,7 @@ public class RecipeDataService{
         {
             PropertyNameCaseInsensitive = true
         };
-
+        //TODO: If data file is empty, this fails. However gets called when adding recipe. So fails at first recipe. 
         var recipes = JsonSerializer.Deserialize<List<Recipe>>(jsonRecipeList, jsonOptions);
 
         if(recipes is not null)

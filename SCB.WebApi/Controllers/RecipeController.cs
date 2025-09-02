@@ -56,7 +56,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpPost(Name = "Add new recipe")]
-    public ActionResult AddNewRecipe(Recipe newRecipe)
+    public ActionResult AddNewRecipe([FromBody] Recipe newRecipe)
     {
         if (newRecipe is null || newRecipe.Parts == null || !newRecipe.Parts.Any())
         {

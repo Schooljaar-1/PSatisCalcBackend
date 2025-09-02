@@ -1,5 +1,36 @@
 [
- {
-  
- }
+  {
+    "Name": "Iron Ingot",
+    "Version": "default",
+    "Machine": "smeler",
+    "Amount": 30,
+    "Type": "item",
+    "Image": "IronIngot",
+    "Parts": [
+      {
+        "PartName": "Iron Ore",
+        "Amount": {
+          "Teller": 30,
+          "Noemer": 1
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Iron Plate",
+    "Version": "default",
+    "Machine": "Constructor",
+    "Amount": 20,
+    "Type": "item",
+    "Image": "IronIngot",
+    "Parts": [
+      {
+        "PartName": "Iron Plate",
+        "Amount": {
+          "Teller": 20,
+          "Noemer": 1
+        }
+      }
+    ]
+  }
 ]
