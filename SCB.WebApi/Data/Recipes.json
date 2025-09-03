@@ -2,7 +2,7 @@
   {
     "Name": "Iron Ingot",
     "Version": "default",
-    "Machine": "smeler",
+    "Machine": "smelter",
     "Amount": 30,
     "Type": "item",
     "Image": "IronIngot",

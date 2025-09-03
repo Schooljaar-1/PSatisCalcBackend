@@ -33,10 +33,10 @@ public class RecipeController : ControllerBase
 
         if (recipes == null || !recipes.Any())
             return NotFound("There are no recipes");
-        
+
         else if (recipe == null || !recipe.Any())
             return NotFound($"No recipes found with name \"{name}\".");
-        
+
         else
             return Ok(recipe);
     }
@@ -105,11 +105,11 @@ public class RecipeController : ControllerBase
         else
         {
             int deletedRecipes = recipeDataService.DeleteRecipeByName(name);
-            if(deletedRecipes == 0)
+            if (deletedRecipes == 0)
                 return BadRequest("Recipe deletion went wrong...");
             else
                 return Ok($"{deletedRecipes} recipes deleted.");
-        }       
+        }
     }
 
     [HttpDelete("name/{name}/version/{version}", Name = "Delete recipes by name and version")]
@@ -130,5 +130,11 @@ public class RecipeController : ControllerBase
             else
                 return Ok($"{deletedRecipe} recipes deleted.");
         }
+    }
+
+    [HttpGet("status", Name = "API Status Check")]
+    public ActionResult StatusCheck()
+    {
+        return Ok();
     }
 }
