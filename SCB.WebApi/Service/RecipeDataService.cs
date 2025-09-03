@@ -8,19 +8,22 @@ public class RecipeDataService{
 
     public List<Recipe> GetAllRecipes()
     {
+        if (!File.Exists(jsonPath))
+            return new List<Recipe>();
+
         string jsonRecipeList = File.ReadAllText(jsonPath);
+
+        if (string.IsNullOrWhiteSpace(jsonRecipeList) || jsonRecipeList.Trim() == "[]")
+            return new List<Recipe>();
 
         var jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
-        //TODO: If data file is empty, this fails. However gets called when adding recipe. So fails at first recipe. 
+
         var recipes = JsonSerializer.Deserialize<List<Recipe>>(jsonRecipeList, jsonOptions);
 
-        if(recipes is not null)
-            return recipes;
-        else
-            return new List<Recipe>();
+        return recipes ?? new List<Recipe>();
     }
 
     public void AddNewRecipe(Recipe newRecipe)
