@@ -58,23 +58,39 @@ public class RecipeController : ControllerBase
     [HttpPost(Name = "Add new recipe")]
     public ActionResult AddNewRecipe([FromBody] Recipe newRecipe)
     {
+        // Validate that the recipe is not null and contains parts
         if (newRecipe is null || newRecipe.Parts == null || !newRecipe.Parts.Any())
         {
             return BadRequest("Recipe data is required and must contain at least one part.");
         }
-        else if (newRecipe.Parts.Any(part => part.Amount == null || part.Amount.Teller == 0 || part.Amount.Noemer == 0))
+
+        // Validate the recipe-level amount
+        if (newRecipe.Amount == null || newRecipe.Amount.Teller == 0 || newRecipe.Amount.Noemer == 0)
+        {
+            return BadRequest("Recipe amount must have a non-zero numerator and denominator.");
+        }
+
+        // Validate each part's amount
+        if (newRecipe.Parts.Any(part => part.Amount == null || part.Amount.Teller == 0 || part.Amount.Noemer == 0))
         {
             return BadRequest("Each part must have a non-zero amount (numerator and denominator).");
         }
-        else if (recipeDataService.FindRecipeByNameAndVersion(newRecipe.Name, newRecipe.Version) is not null)
+
+        // Ensure the image is provided
+        if (string.IsNullOrWhiteSpace(newRecipe.Image))
+        {
+            return BadRequest("Image is required.");
+        }
+
+        // Check for duplicate recipes
+        if (recipeDataService.FindRecipeByNameAndVersion(newRecipe.Name, newRecipe.Version) is not null)
         {
             return BadRequest($"A recipe with name \"{newRecipe.Name}\" and version \"{newRecipe.Version}\" already exists.");
         }
-        else
-        {
-            recipeDataService.AddNewRecipe(newRecipe);
-            return Ok(newRecipe);
-        }
+
+        // Add the new recipe
+        recipeDataService.AddNewRecipe(newRecipe);
+        return Ok(newRecipe);
     }
 
     [HttpDelete(Name = "Delete all recipes")]

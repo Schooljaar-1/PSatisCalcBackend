@@ -3,15 +3,18 @@
     "Name": "Iron Ingot",
     "Version": "default",
     "Machine": "smelter",
-    "Amount": 30,
+    "Amount": { 
+      "Teller": 30, 
+      "Noemer": 1 
+    }, 
     "Type": "item",
     "Image": "IronIngot",
     "Parts": [
       {
         "PartName": "Iron Ore",
-        "Amount": {
-          "Teller": 30,
-          "Noemer": 1
+        "Amount": { 
+          "Teller": 30, 
+          "Noemer": 1 
         }
       }
     ]
@@ -20,15 +23,18 @@
     "Name": "Iron Plate",
     "Version": "default",
     "Machine": "Constructor",
-    "Amount": 20,
+    "Amount": { 
+      "Teller": 20, 
+      "Noemer": 1 
+    }, 
     "Type": "item",
-    "Image": "IronIngot",
+    "Image": "IronPlates",
     "Parts": [
       {
         "PartName": "Iron Plate",
-        "Amount": {
-          "Teller": 20,
-          "Noemer": 1
+        "Amount": { 
+          "Teller": 20, 
+          "Noemer": 1 
         }
       }
     ]
