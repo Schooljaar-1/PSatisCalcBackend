@@ -59,10 +59,10 @@ public class RecipeController : ControllerBase
     public ActionResult AddNewRecipe([FromBody] Recipe newRecipe)
     {
         // Validate that the recipe is not null and contains parts
-        if (newRecipe is null || newRecipe.Parts == null || !newRecipe.Parts.Any())
-        {
-            return BadRequest("Recipe data is required and must contain at least one part.");
-        }
+        // if (newRecipe is null || newRecipe.Parts == null || !newRecipe.Parts.Any())
+        // {
+        //     return BadRequest("Recipe data is required and must contain at least one part.");
+        // }
 
         // Validate the recipe-level amount
         if (newRecipe.Amount == null || newRecipe.Amount.Teller == 0 || newRecipe.Amount.Noemer == 0)
