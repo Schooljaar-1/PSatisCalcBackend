@@ -58,5 +58,32 @@
         }
       }
     ]
+  },
+  {
+    "Name": "Reinforced Iron Plate",
+    "Version": "default",
+    "Machine": "Assembler",
+    "Amount": {
+      "Teller": 5,
+      "Noemer": 1
+    },
+    "Type": "item",
+    "Image": "ReinforcedIronPlates",
+    "Parts": [
+      {
+        "PartName": "Iron Plate",
+        "Amount": {
+          "Teller": 30,
+          "Noemer": 1
+        }
+      },
+      {
+        "PartName": "Screw",
+        "Amount": {
+          "Teller": 60,
+          "Noemer": 1
+        }
+      }
+    ]
   }
 ]

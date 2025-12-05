@@ -71,7 +71,7 @@ public class RecipeController : ControllerBase
         }
 
         // Validate each part's amount
-        if (newRecipe.Parts.Any(part => part.Amount == null || part.Amount.Teller == 0 || part.Amount.Noemer == 0))
+        if (newRecipe.Parts != null && newRecipe.Parts.Any(part => part.Amount == null || part.Amount.Teller == 0 || part.Amount.Noemer == 0))
         {
             return BadRequest("Each part must have a non-zero amount (numerator and denominator).");
         }
