@@ -19,3 +19,9 @@ public class Fraction
     public required int Teller {get; set;}
     public required int Noemer {get; set;}
 }
+
+public class FractionCompressed
+{
+    public required int Integer {get;set;}
+    public required Fraction Fraction {get;set;}
+}

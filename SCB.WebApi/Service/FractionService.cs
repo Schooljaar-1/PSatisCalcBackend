@@ -117,22 +117,46 @@ public class FractionService
 
         return fraction;
     }
-    /// <summary>
-    /// Takes in a fraction and an integer and divides the fraction by that integer
-    /// </summary>
-    /// <param name="fraction"></param>
-    /// <param name="amountPerMinute"></param>
-    /// <returns>Simplified fraction divided by given integer</returns>
-    public Fraction Unify(Fraction fraction, int amountPerMinute)
-    {
-        var temporary = new Fraction
-        {
-            Noemer = fraction.Noemer * amountPerMinute,
-            Teller = fraction.Teller
-        };
 
-        SimplifyFraction(temporary);
-        return temporary;
+    public FractionCompressed DecompressFraction(Fraction fraction)
+    {
+        if (fraction.Teller < fraction.Noemer)
+        {
+            return new FractionCompressed
+            {
+                Integer = 0,
+                Fraction = new Fraction
+                {
+                    Teller = fraction.Teller,
+                    Noemer = fraction.Noemer
+                }
+            };
+        }
+
+        if (fraction.Teller == fraction.Noemer)
+        {
+            return new FractionCompressed
+            {
+                Integer = 1,
+                Fraction = new Fraction
+                {
+                    Teller = 0,
+                    Noemer = 1
+                }
+            };
+        }
+
+        int newInteger = fraction.Teller / fraction.Noemer;
+
+        return new FractionCompressed
+        {
+            Integer = newInteger,
+            Fraction = new Fraction
+            {
+                Teller = fraction.Teller % fraction.Noemer,
+                Noemer = fraction.Noemer
+            }
+        };
     }
 
 }
