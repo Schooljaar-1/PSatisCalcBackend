@@ -20,7 +20,7 @@ public class Fraction
     public required int Noemer {get; set;}
 }
 
-public class FractionCompressed
+public class FractionDecompressed
 {
     public required int Integer {get;set;}
     public required Fraction Fraction {get;set;}

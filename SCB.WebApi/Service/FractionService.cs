@@ -118,11 +118,11 @@ public class FractionService
         return fraction;
     }
 
-    public FractionCompressed DecompressFraction(Fraction fraction)
+    public FractionDecompressed DecompressFraction(Fraction fraction)
     {
         if (fraction.Teller < fraction.Noemer)
         {
-            return new FractionCompressed
+            return new FractionDecompressed
             {
                 Integer = 0,
                 Fraction = new Fraction
@@ -133,9 +133,9 @@ public class FractionService
             };
         }
 
-        if (fraction.Teller == fraction.Noemer)
+        else if (fraction.Teller == fraction.Noemer)
         {
-            return new FractionCompressed
+            return new FractionDecompressed
             {
                 Integer = 1,
                 Fraction = new Fraction
@@ -146,17 +146,42 @@ public class FractionService
             };
         }
 
-        int newInteger = fraction.Teller / fraction.Noemer;
-
-        return new FractionCompressed
+        else
         {
-            Integer = newInteger,
-            Fraction = new Fraction
+            int newInteger = fraction.Teller / fraction.Noemer;
+
+            return new FractionDecompressed
             {
-                Teller = fraction.Teller % fraction.Noemer,
-                Noemer = fraction.Noemer
-            }
-        };
+                Integer = newInteger,
+                Fraction = new Fraction
+                {
+                    Teller = fraction.Teller % fraction.Noemer,
+                    Noemer = fraction.Noemer
+                }
+            };
+        }
+
+    }
+
+    public Fraction CompressFraction (FractionDecompressed decompressedFraction)
+    {
+        if(decompressedFraction.Integer == 0)
+        {
+            return new Fraction
+            {
+                Teller = decompressedFraction.Fraction.Teller,
+                Noemer = decompressedFraction.Fraction.Noemer
+            };
+        }
+
+        else
+        {
+           return new Fraction
+           {
+               Teller = decompressedFraction.Integer * decompressedFraction.Fraction.Noemer + decompressedFraction.Fraction.Teller,
+               Noemer = decompressedFraction.Fraction.Noemer
+           } ;
+        }
     }
 
 }
