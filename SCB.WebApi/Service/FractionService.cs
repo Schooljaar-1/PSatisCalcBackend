@@ -117,7 +117,11 @@ public class FractionService
 
         return fraction;
     }
-
+    /// <summary>
+    /// Decompresses a fraction. E.g. 3/2 --> 1 1/2
+    /// </summary>
+    /// <param name="fraction"></param>
+    /// <returns></returns>
     public FractionDecompressed DecompressFraction(Fraction fraction)
     {
         if (fraction.Teller < fraction.Noemer)
@@ -162,7 +166,11 @@ public class FractionService
         }
 
     }
-
+    /// <summary>
+    /// Compresses a fraction. E.g. 1 1/2 --> 3/2
+    /// </summary>
+    /// <param name="decompressedFraction"></param>
+    /// <returns></returns>
     public Fraction CompressFraction (FractionDecompressed decompressedFraction)
     {
         if(decompressedFraction.Integer == 0)
