@@ -2,7 +2,7 @@ namespace FlowchartServices;
 
 public class FlowChartService{
     
-    public FlowChartResult calculateFlowChart(List<FractionDecompressed> amounts, List<Recipe> recipes)
+    public FlowChartResult calculateFlowChart(CalculateRecipeRequest recipesAndAmounts)
     {
         return new FlowChartResult()
         {

@@ -31,3 +31,9 @@ public class FlowChartResult
     public required List<Node> Nodes {get; set;}
     public required List<Edge> Edges {get; set;}
 }
+
+public class CalculateRecipeRequest
+{
+    public required List<FractionDecompressed> Amounts { get; set; }
+    public required List<Recipe> Recipes { get; set; }
+}
