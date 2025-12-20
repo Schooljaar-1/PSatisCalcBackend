@@ -2,9 +2,9 @@ namespace FlowchartServices;
 
 public class FlowChartService{
     
-    public FlowChartResult calculateFlowChart(CalculateRecipeRequest recipesAndAmounts)
+    public FlowchartResult calculateFlowChart(CalculateRecipeRequest recipesAndAmounts)
     {
-        return new FlowChartResult()
+        return new FlowchartResult()
         {
             Nodes = new(),
             Edges = new()

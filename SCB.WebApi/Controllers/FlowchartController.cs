@@ -5,19 +5,34 @@ namespace SCB.WebApi.FlowchartControllers;
 
 [Route("api/[Controller]")]
 [ApiController]
-
 public class FlowchartController : ControllerBase
 {
+    // Just create service manually
     FlowChartService FlowChartService = new();
 
     [HttpPost(Name = "Calculate resources and amounts needed for given recipe(s)")]
-    public ActionResult<FlowChartResult> CalculateRecipe([FromBody] CalculateRecipeRequest request)
+    public ActionResult<FlowchartResult> CalculateRecipe([FromBody] CalculateRecipeRequest request)
     {
-        // TODO: Start making basic checks like if any of the amounts are 0 or negative.
-        var amounts = request.Amounts;
-        var recipes = request.Recipes;
+        // Map amounts and recipes
+        var amounts = request.Items
+            .Select(x => x.Amount)
+            .ToList();
 
-        return new FlowChartResult()
+        var recipes = request.Items
+            .Select(x => x.Recipe)
+            .ToList();
+
+        // foreach (var amount in amounts)
+        // {
+        //     Console.WriteLine($"WANTED AMOUNT: Integer: {amount.Integer}, Fraction: {amount.Fraction.Teller}/{amount.Fraction.Noemer}");
+        // }
+
+        // foreach (var recipe in recipes)
+        // {
+        //     Console.WriteLine($"RECIPE INFORMATION: Recipe: {recipe.Name}, Machine: {recipe.Machine}, Amount: {recipe.Amount.Teller}/{recipe.Amount.Noemer}");
+        // }
+
+        return new FlowchartResult()
         {
             Nodes = new(),
             Edges = new()

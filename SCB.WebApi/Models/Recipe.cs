@@ -25,3 +25,14 @@ public class FractionDecompressed
     public required int Integer {get;set;}
     public required Fraction Fraction {get;set;}
 }
+
+public class CalculateRecipeRequest
+{
+    public required List<RecipeAmountPair> Items { get; set; }
+}
+
+public class RecipeAmountPair
+{
+    public required Recipe Recipe { get; set; }
+    public required FractionDecompressed Amount { get; set; }
+}

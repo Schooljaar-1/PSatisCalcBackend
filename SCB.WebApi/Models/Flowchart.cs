@@ -26,14 +26,10 @@ public class NodeData
     public required string Image {get; set;} //Image of said machine
 }
 
-public class FlowChartResult
+public class FlowchartResult
 {
     public required List<Node> Nodes {get; set;}
     public required List<Edge> Edges {get; set;}
 }
 
-public class CalculateRecipeRequest
-{
-    public required List<FractionDecompressed> Amounts { get; set; }
-    public required List<Recipe> Recipes { get; set; }
-}
+
