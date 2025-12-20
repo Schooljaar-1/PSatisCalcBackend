@@ -1,7 +1,7 @@
 using RecipeServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SCB.WebApi.Controllers;
+namespace SCB.WebApi.RecipeControllers;
 
 [Route("api/[Controller]")]
 [ApiController]

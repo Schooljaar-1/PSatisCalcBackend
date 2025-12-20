@@ -25,3 +25,9 @@ public class NodeData
     public required string SubLabel {get; set;} //Amount of machines needed
     public required string Image {get; set;} //Image of said machine
 }
+
+public class FlowChartResult
+{
+    public required List<Node> Nodes {get; set;}
+    public required List<Edge> Edges {get; set;}
+}
