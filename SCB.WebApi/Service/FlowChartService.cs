@@ -9,7 +9,7 @@ using System.Linq;
 public class FlowChartService
 {
     private const float VerticalSpacing = 200f; 
-    private const float HorizontalSpacing = 400f;
+    private const float HorizontalSpacing = 250f;
     
     private Dictionary<int, float> _columnYOffsets = new();
 
@@ -20,6 +20,7 @@ public class FlowChartService
         List<Edge> calculatedEdges = new();
         var fractionService = new FractionService();
         var allRecipes = GetAllRecipes();
+
         // Stores the cumulative sum of machines (or ore per minute) for each node ID
         Dictionary<string, dynamic> nodeAmounts = new();
         // Stores the cumulative sum of items per minute for each Source-Target pair
@@ -67,8 +68,10 @@ public class FlowChartService
             {
                 foreach (var part in recipeAndAmount.Recipe.Parts)
                 {
-                    var found = allRecipes.FirstOrDefault(r => r.Name == part.PartName && r.Version == "default");
+                    // Use helper to handle missing "Ore" recipes
+                    var found = GetRecipeOrMockOre(allRecipes, part.PartName);
                     if (found == null) continue;
+
                     partsList.Add(new PartsAndTargets {
                         Recipe = found,
                         Target = machineNodeId,
@@ -90,12 +93,10 @@ public class FlowChartService
                     var existingNode = calculatedNodes.FirstOrDefault(n => n.Id == partNodeId);
                     if (existingNode != null)
                     {
-                        // Update existing node's math (Summing machine counts)
+                        // Update existing node's math
                         nodeAmounts[partNodeId] = fractionService.Addition(nodeAmounts[partNodeId], partCalculatedMachine);
                         
-                        // If it's a miner, we want to show total ORE per minute (which equals the total machine output here)
                         if (part.Recipe.Machine == "Mining drill") {
-                             // Re-calculating total ore: (Total Machines * Recipe Output)
                              var totalOre = fractionService.Multiplication(nodeAmounts[partNodeId], part.Recipe.Amount);
                              existingNode.NodeData.SubLabel = $"{FractionToDouble(totalOre):0.###} ore p/m";
                         }
@@ -120,14 +121,14 @@ public class FlowChartService
                         });
                     }
 
-                    // UPDATE OR ADD EDGE (Summing the labels if source/target match)
                     UpdateOrAddEdge(calculatedEdges, edgeAmounts, partNodeId, part.Target, part.TargetAmount, part.Recipe.Name, fractionService);
 
                     if (part.Recipe.Parts != null)
                     {
                         foreach (var subPart in part.Recipe.Parts)
                         {
-                            var foundSub = allRecipes.FirstOrDefault(r => r.Name == subPart.PartName && r.Version == "default");
+                            // Use helper recursively
+                            var foundSub = GetRecipeOrMockOre(allRecipes, subPart.PartName);
                             if (foundSub != null)
                             {
                                 temporaryPartsList.Add(new PartsAndTargets {
@@ -153,16 +154,12 @@ public class FlowChartService
         
         if (edgeAmounts.ContainsKey(edgeKey))
         {
-            // Update the math
             edgeAmounts[edgeKey] = fs.Addition(edgeAmounts[edgeKey], amountFraction);
-            
-            // Find the existing edge object and update its label
             var existingEdge = edges.First(e => e.Source == source && e.Target == target);
             existingEdge.Label = $"{FractionToDouble(edgeAmounts[edgeKey]):0.###} {itemName}s/m";
         }
         else
         {
-            // Create new
             edgeAmounts[edgeKey] = amountFraction;
             edges.Add(new Edge() {
                 Id = $"edge_{Guid.NewGuid().ToString().Substring(0, 8)}",
@@ -201,5 +198,26 @@ public class FlowChartService
         var recipesJsonPath = Path.Combine("Data", "Recipes.json");
         var recipesJson = File.ReadAllText(recipesJsonPath);
         return JsonSerializer.Deserialize<List<Recipe>>(recipesJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Recipe>();
+    }
+
+    private Recipe? GetRecipeOrMockOre(List<Recipe> allRecipes, string partName)
+    {
+        var found = allRecipes.FirstOrDefault(r => r.Name == partName && r.Version == "default");
+        
+        if (found == null && partName.Contains("ore", StringComparison.OrdinalIgnoreCase))
+        {
+            return new Recipe
+            {
+                Name = partName,
+                Machine = "Mining drill",
+                Version = "default",
+                Type = "Ore",
+                Image = "Mining drill",
+                // Set to 1 so that TargetAmount / 1 = total items needed
+                Amount = new Fraction { Teller = 1, Noemer = 1 }, 
+                Parts = null 
+            };
+        }
+        return found;
     }
 }

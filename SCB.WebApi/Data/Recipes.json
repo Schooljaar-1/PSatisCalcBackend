@@ -60,18 +60,6 @@
     ]
   },
   {
-    "Name": "Iron Ore",
-    "Version": "default",
-    "Machine": "Mining drill",
-    "Amount": {
-      "Teller": 30,
-      "Noemer": 1
-    },
-    "Type": "Ore",
-    "Image": "IronNew",
-    "Parts": []
-  },
-  {
     "Name": "Iron Screw",
     "Version": "default",
     "Machine": "Constructor",
@@ -86,33 +74,6 @@
         "PartName": "Iron Rod",
         "Amount": {
           "Teller": 10,
-          "Noemer": 1
-        }
-      }
-    ]
-  },
-  {
-    "Name": "Reinforced Iron Plate",
-    "Version": "default",
-    "Machine": "Assembler",
-    "Amount": {
-      "Teller": 5,
-      "Noemer": 1
-    },
-    "Type": "Item",
-    "Image": "ReinforcedIronPlates",
-    "Parts": [
-      {
-        "PartName": "Iron Plate",
-        "Amount": {
-          "Teller": 30,
-          "Noemer": 1
-        }
-      },
-      {
-        "PartName": "Iron Screw",
-        "Amount": {
-          "Teller": 60,
           "Noemer": 1
         }
       }
