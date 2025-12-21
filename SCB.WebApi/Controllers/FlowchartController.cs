@@ -1,6 +1,5 @@
-using FlowchartServices;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using FlowchartServices;
 
 namespace SCB.WebApi.FlowchartControllers;
 
@@ -8,7 +7,7 @@ namespace SCB.WebApi.FlowchartControllers;
 [ApiController]
 public class FlowchartController : ControllerBase
 {
-    FlowChartService FlowChartService = new();
+    private FlowChartService _FlowChartService = new();
 
     [HttpPost(Name = "Calculate resources and amounts needed for given recipe(s)")]
     public ActionResult<FlowchartResult> CalculateRecipe([FromBody] CalculateRecipeRequest request)
@@ -25,7 +24,6 @@ public class FlowchartController : ControllerBase
                 return BadRequest("Impossible to divide by zero");
         }
 
-        return FlowChartService.calculateFlowChart(request);
-
+        return _FlowChartService.calculateFlowChart(request);
     }
 }
