@@ -1,211 +1,205 @@
 namespace FlowchartServices;
 
 using System;
-using System.Reflection.Emit;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Linq;
 
-public class FlowChartService{
+public class FlowChartService
+{
+    private const float VerticalSpacing = 200f; 
+    private const float HorizontalSpacing = 400f;
     
-    /// <summary>
-    /// Takes in wanted recipes and their amounts needed and calculates the whole resource chain. Ouput complies with react-flow input.
-    /// </summary>
-    /// <param name="recipesAndAmounts"></param>
-    /// <returns></returns>
+    private Dictionary<int, float> _columnYOffsets = new();
+
     public FlowchartResult calculateFlowChart(CalculateRecipeRequest recipesAndAmounts)
     {
+        _columnYOffsets.Clear();
         List<Node> calculatedNodes = new();
         List<Edge> calculatedEdges = new();
         var fractionService = new FractionService();
         var allRecipes = GetAllRecipes();
+        // Stores the cumulative sum of machines (or ore per minute) for each node ID
+        Dictionary<string, dynamic> nodeAmounts = new();
+        // Stores the cumulative sum of items per minute for each Source-Target pair
+        Dictionary<string, dynamic> edgeAmounts = new();
 
-        int index = 0;
-        foreach(var recipeAndAmount in recipesAndAmounts.Items)
+        int productIndex = 0;
+        foreach (var recipeAndAmount in recipesAndAmounts.Items)
         {
-            #region Starting nodes and edge
-            // Starting node 1 (endproduct)
-            var productSubLabel = recipeAndAmount.Amount.Fraction.Teller == 0
-                ? $"{recipeAndAmount.Amount.Integer}"
-                : $"{recipeAndAmount.Amount.Integer} {recipeAndAmount.Amount.Fraction.Teller}/{recipeAndAmount.Amount.Fraction.Noemer}";
+            // --- 1. FINAL PRODUCT NODE (Depth 0) ---
+            string productNodeId = $"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_prod_{productIndex}";
+            
             calculatedNodes.Add(new Node()
             {
-                Id=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_product{index}",
-                Position = new Position { X = 0f, Y = index * 100f },
-                NodeData = new NodeData
-                {
+                Id = productNodeId,
+                Position = new Position { X = 0f, Y = GetNextY(0) },
+                NodeData = new NodeData {
                     Label = recipeAndAmount.Recipe.Name,
-                    SubLabel = productSubLabel,
+                    SubLabel = FormatFraction(recipeAndAmount.Amount),
                     Image = recipeAndAmount.Recipe.Image
                 }
             });
 
-            // Starting node 2 (machine to endproduct)
-            #region using fraction service
-            var recipeAmount = recipeAndAmount.Recipe.Amount;
+            // --- 2. FINAL MACHINE NODE (Depth 1) ---
+            string machineNodeId = $"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_mach_{productIndex}";
             var requestedFraction = fractionService.CompressFraction(recipeAndAmount.Amount);
-            var machineAmountresult = fractionService.Division(requestedFraction, recipeAmount);
-            var decompressed = fractionService.DecompressFraction(machineAmountresult);
-            var machineSubLabel = decompressed.Fraction.Teller == 0
-                ? $"{decompressed.Integer}"
-                : $"{decompressed.Integer} {decompressed.Fraction.Teller}/{decompressed.Fraction.Noemer}";
-            #endregion
+            var machineAmountResult = fractionService.Division(requestedFraction, recipeAndAmount.Recipe.Amount);
+            nodeAmounts[machineNodeId] = machineAmountResult;
+
             calculatedNodes.Add(new Node()
             {
-                Id=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_machine{index}",
-                Position = new Position { X = -300f, Y = index * 100f },
-                NodeData = new NodeData
-                {
+                Id = machineNodeId,
+                Position = new Position { X = -HorizontalSpacing, Y = GetNextY(1) },
+                NodeData = new NodeData {
                     Label = recipeAndAmount.Recipe.Machine,
-                    SubLabel = machineSubLabel,
+                    SubLabel = FormatFraction(fractionService.DecompressFraction(machineAmountResult)),
                     Image = recipeAndAmount.Recipe.Machine
                 }
             });
-            
-            // Starting edge
-            calculatedEdges.Add(new Edge(){
-                Id=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_machine_to_endproduct{index}",
-                Source=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_machine{index}",
-                Target=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_product{index}",
-                Label=$"{(recipeAndAmount.Amount.Integer + (double)recipeAndAmount.Amount.Fraction.Teller / recipeAndAmount.Amount.Fraction.Noemer):0.###} {recipeAndAmount.Recipe.Name}s per minute"
-            });
 
-            #endregion
+            UpdateOrAddEdge(calculatedEdges, edgeAmounts, machineNodeId, productNodeId, requestedFraction, recipeAndAmount.Recipe.Name, fractionService);
 
-            // Filling a list of recipes referred as parts.
+            // --- 3. RECURSIVE PARTS (Depth 2+) ---
             List<PartsAndTargets> partsList = new();
-            #region getting a list of all parts and filling partslist with the recipes of parts needed from parent, saving parent as target
-            // If there are no parts, skip
             if (recipeAndAmount.Recipe.Parts != null)
             {
                 foreach (var part in recipeAndAmount.Recipe.Parts)
                 {
-                    var partName = part.PartName;
-                    var partVersion = "default"; // use default when not provided
-
-                    var found = allRecipes.FirstOrDefault(r => r.Name == partName && r.Version == partVersion);
-                    if (found == null)
-                        throw new Exception($"recipe with name {partName} and version {partVersion} is unknown");
-
-                    // TargetAmount should represent the resource flow (items/min) required by the target machine:
-                    // machinesNeededForTarget * inputPerMachine
-                    var requiredPartAmount = fractionService.Multiplication(machineAmountresult, part.Amount);
-
-                    partsList.Add(new(){
-                        Recipe=found,
-                        Target=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_machine{index}",
-                        TargetAmount=requiredPartAmount
+                    var found = allRecipes.FirstOrDefault(r => r.Name == part.PartName && r.Version == "default");
+                    if (found == null) continue;
+                    partsList.Add(new PartsAndTargets {
+                        Recipe = found,
+                        Target = machineNodeId,
+                        TargetAmount = fractionService.Multiplication(machineAmountResult, part.Amount)
                     });
                 }
             }
-            #endregion
 
-            int depth = 0;
-            while(partsList.Count != 0){
+            int currentDepth = 2;
+            while (partsList.Any())
+            {
                 List<PartsAndTargets> temporaryPartsList = new();
-                int partIndex = 0;
                 
-                foreach(var part in partsList){
-                    var partNodeId = $"{part.Recipe.Name}_{part.Recipe.Version}_node_{index}_{depth}_{partIndex}";
-                    #region calculating part machine amount
+                foreach (var part in partsList)
+                {
+                    string partNodeId = $"{part.Recipe.Name}_{part.Recipe.Version}";
                     var partCalculatedMachine = fractionService.Division(part.TargetAmount, part.Recipe.Amount);
-                    var partCalculatedMachineDecompressed = fractionService.DecompressFraction(partCalculatedMachine);
-                    var partSublabel = partCalculatedMachineDecompressed.Fraction.Teller == 0
-                        ? $"{partCalculatedMachineDecompressed.Integer}"
-                        : $"{partCalculatedMachineDecompressed.Integer} {partCalculatedMachineDecompressed.Fraction.Teller}/{partCalculatedMachineDecompressed.Fraction.Noemer}";
-                    #endregion
 
-                    # region adding part node and edge
-                    if(part.Recipe.Machine != "Mining drill")
+                    var existingNode = calculatedNodes.FirstOrDefault(n => n.Id == partNodeId);
+                    if (existingNode != null)
                     {
+                        // Update existing node's math (Summing machine counts)
+                        nodeAmounts[partNodeId] = fractionService.Addition(nodeAmounts[partNodeId], partCalculatedMachine);
+                        
+                        // If it's a miner, we want to show total ORE per minute (which equals the total machine output here)
+                        if (part.Recipe.Machine == "Mining drill") {
+                             // Re-calculating total ore: (Total Machines * Recipe Output)
+                             var totalOre = fractionService.Multiplication(nodeAmounts[partNodeId], part.Recipe.Amount);
+                             existingNode.NodeData.SubLabel = $"{FractionToDouble(totalOre):0.###} ore p/m";
+                        }
+                        else {
+                            existingNode.NodeData.SubLabel = FormatFraction(fractionService.DecompressFraction(nodeAmounts[partNodeId]));
+                        }
+                    }
+                    else
+                    {
+                        nodeAmounts[partNodeId] = partCalculatedMachine;
                         calculatedNodes.Add(new Node()
                         {
                             Id = partNodeId,
-                            Position = new Position { X = (-600f - (depth * 300f)) - (partIndex * 200f), Y = index * 100f },
-                            NodeData = new NodeData 
-                            {
+                            Position = new Position { X = -(currentDepth * HorizontalSpacing), Y = GetNextY(currentDepth) },
+                            NodeData = new NodeData {
                                 Label = part.Recipe.Machine,
-                                SubLabel = $"{partSublabel}",
+                                SubLabel = (part.Recipe.Machine == "Mining drill")
+                                    ? $"{FractionToDouble(part.TargetAmount):0.###} ore p/m"
+                                    : FormatFraction(fractionService.DecompressFraction(partCalculatedMachine)),
                                 Image = part.Recipe.Machine
                             }
                         });
                     }
-                    else{
-                        calculatedNodes.Add(new Node()
-                        {
-                            Id = partNodeId,
-                            Position = new Position { X = (-600f - (depth * 300f)) - (partIndex * 200f), Y = index * 100f },
-                            NodeData = new NodeData 
-                            {
-                                Label = part.Recipe.Machine,
-                                SubLabel = $"{(double)part.TargetAmount.Teller / part.TargetAmount.Noemer:0.###} ore p/m",
-                                Image = part.Recipe.Machine
-                            }
-                        });
-                    }
 
-                    calculatedEdges.Add(new Edge()
-                    {
-                        Id = $"{part.Recipe.Name}_{part.Recipe.Version}_edge_{index}_{depth}_{partIndex}",
-                        Source = partNodeId,
-                        Target=$"{part.Target}",
-                        Label=$"{(double)part.TargetAmount.Teller / part.TargetAmount.Noemer:0.###} {part.Recipe.Name}s per minute"
-                    });
+                    // UPDATE OR ADD EDGE (Summing the labels if source/target match)
+                    UpdateOrAddEdge(calculatedEdges, edgeAmounts, partNodeId, part.Target, part.TargetAmount, part.Recipe.Name, fractionService);
 
-                    #endregion
-
-                    # region adding new parts to partlist, skipping if no parts inside of next level recipe
-                    if (part.Recipe.Parts != null && part.Recipe.Parts.Count != 0)
+                    if (part.Recipe.Parts != null)
                     {
                         foreach (var subPart in part.Recipe.Parts)
                         {
-                            var subPartName = subPart.PartName;
-                            var subPartVersion = "default";
-
-                            var foundSub = allRecipes.FirstOrDefault(r => r.Name == subPartName && r.Version == subPartVersion);
-                            if (foundSub == null)
-                                throw new Exception($"recipe with name {subPartName} and version {subPartVersion} is unknown");
-                                
-                            var neededSubPartAmount = fractionService.Multiplication(partCalculatedMachine, subPart.Amount);
-
-                            temporaryPartsList.Add(new PartsAndTargets(){
-                                Recipe = foundSub,
-                                Target = partNodeId,
-                                TargetAmount = neededSubPartAmount
-                            });
+                            var foundSub = allRecipes.FirstOrDefault(r => r.Name == subPart.PartName && r.Version == "default");
+                            if (foundSub != null)
+                            {
+                                temporaryPartsList.Add(new PartsAndTargets {
+                                    Recipe = foundSub,
+                                    Target = partNodeId,
+                                    TargetAmount = fractionService.Multiplication(partCalculatedMachine, subPart.Amount)
+                                });
+                            }
                         }
                     }
-                    #endregion
-                    partIndex++;
                 }
-
-                partsList.Clear();
-                partsList.AddRange(temporaryPartsList);
-                temporaryPartsList.Clear();
-                depth++;
+                partsList = temporaryPartsList;
+                currentDepth++;
             }
-
-            index++;
+            productIndex++;
         }
-        return new FlowchartResult()
-        {
-            Nodes = calculatedNodes,
-            Edges = calculatedEdges
-        };
+        return new FlowchartResult { Nodes = calculatedNodes, Edges = calculatedEdges };
     }
-    
-    public List<Recipe> GetAllRecipes(){
-        // Load recipes from Data/Recipes.json
-        var recipesJsonPath = Path.Combine("Data", "Recipes.json");
-        if (!File.Exists(recipesJsonPath))
-            throw new Exception($"Recipes data file not found at {recipesJsonPath}");
 
-        var recipesJson = File.ReadAllText(recipesJsonPath);
-        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        List<Recipe>? allRecipes = JsonSerializer.Deserialize<List<Recipe>>(recipesJson, jsonOptions);
-        if (allRecipes == null)
-            throw new Exception("Failed to parse recipes data");
+    private void UpdateOrAddEdge(List<Edge> edges, Dictionary<string, dynamic> edgeAmounts, string source, string target, dynamic amountFraction, string itemName, FractionService fs)
+    {
+        string edgeKey = $"{source}->{target}";
         
-        return allRecipes;
+        if (edgeAmounts.ContainsKey(edgeKey))
+        {
+            // Update the math
+            edgeAmounts[edgeKey] = fs.Addition(edgeAmounts[edgeKey], amountFraction);
+            
+            // Find the existing edge object and update its label
+            var existingEdge = edges.First(e => e.Source == source && e.Target == target);
+            existingEdge.Label = $"{FractionToDouble(edgeAmounts[edgeKey]):0.###} {itemName}s/m";
+        }
+        else
+        {
+            // Create new
+            edgeAmounts[edgeKey] = amountFraction;
+            edges.Add(new Edge() {
+                Id = $"edge_{Guid.NewGuid().ToString().Substring(0, 8)}",
+                Source = source,
+                Target = target,
+                Label = $"{FractionToDouble(amountFraction):0.###} {itemName}s/m"
+            });
+        }
+    }
+
+    private float GetNextY(int depth)
+    {
+        if (!_columnYOffsets.ContainsKey(depth))
+        {
+            _columnYOffsets[depth] = 0f;
+            return 0f;
+        }
+        _columnYOffsets[depth] += VerticalSpacing;
+        return _columnYOffsets[depth];
+    }
+
+    private string FormatFraction(dynamic amount)
+    {
+        if (amount.Fraction.Teller == 0) return $"{amount.Integer}";
+        return $"{amount.Integer} {amount.Fraction.Teller}/{amount.Fraction.Noemer}";
+    }
+
+    private double FractionToDouble(dynamic fraction)
+    {
+        if (fraction.Noemer == 0) return 0;
+        return (double)fraction.Teller / fraction.Noemer;
+    }
+
+    public List<Recipe> GetAllRecipes()
+    {
+        var recipesJsonPath = Path.Combine("Data", "Recipes.json");
+        var recipesJson = File.ReadAllText(recipesJsonPath);
+        return JsonSerializer.Deserialize<List<Recipe>>(recipesJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Recipe>();
     }
 }
