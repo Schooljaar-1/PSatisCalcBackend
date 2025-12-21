@@ -36,4 +36,5 @@ public class PartsAndTargets
 {
     public required Recipe Recipe {get; set;}
     public required string Target {get; set;}
+    public required Fraction TargetAmont {get; set;}
 }

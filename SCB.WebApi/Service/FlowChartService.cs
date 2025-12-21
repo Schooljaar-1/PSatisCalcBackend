@@ -43,8 +43,8 @@ public class FlowChartService{
             #region using fraction service
             var recipeAmount = recipeAndAmount.Recipe.Amount;
             var requestedFraction = fractionService.CompressFraction(recipeAndAmount.Amount);
-            var result = fractionService.Division(requestedFraction, recipeAmount);
-            var decompressed = fractionService.DecompressFraction(result);
+            var machineAmountresult = fractionService.Division(requestedFraction, recipeAmount);
+            var decompressed = fractionService.DecompressFraction(machineAmountresult);
             var machineSubLabel = decompressed.Fraction.Teller == 0
                 ? $"{decompressed.Integer}"
                 : $"{decompressed.Integer} {decompressed.Fraction.Teller}/{decompressed.Fraction.Noemer}";
@@ -99,14 +99,15 @@ public class FlowChartService{
 
                     parstList.Add(new(){
                         Recipe=found,
-                        Target=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_machine{index}"
+                        Target=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_machine{index}",
+                        TargetAmont=machineAmountresult
                     });
                 }
             }
             #endregion
 
             while(parstList.Count != 0){
-               Console.WriteLine(parstList);
+               Console.WriteLine(JsonSerializer.Serialize(parstList, new JsonSerializerOptions { WriteIndented = true }));
                parstList.Clear();
             }
 
