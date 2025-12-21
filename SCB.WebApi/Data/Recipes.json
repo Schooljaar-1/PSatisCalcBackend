@@ -85,5 +85,17 @@
         }
       }
     ]
+  },
+  {
+    "Name": "Iron Ore",
+    "Version": "default",
+    "Machine": "Mining drill",
+    "Amount": {
+      "Teller": 30,
+      "Noemer": 1
+    },
+    "Type": "Ore",
+    "Image": "IronNew",
+    "Parts": []
   }
 ]

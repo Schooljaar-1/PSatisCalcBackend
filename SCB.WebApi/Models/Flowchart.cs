@@ -32,4 +32,8 @@ public class FlowchartResult
     public required List<Edge> Edges {get; set;}
 }
 
-
+public class PartsAndTargets
+{
+    public required Recipe Recipe {get; set;}
+    public required string Target {get; set;}
+}

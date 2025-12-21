@@ -2,6 +2,9 @@ namespace FlowchartServices;
 
 using System;
 using System.Reflection.Emit;
+using System.IO;
+using System.Text.Json;
+using System.Linq;
 
 public class FlowChartService{
     
@@ -68,7 +71,44 @@ public class FlowChartService{
 
             #endregion
 
-            // Filling a list of recipes referred as parts. 
+            // Filling a list of recipes referred as parts.
+            List<PartsAndTargets> parstList = new();
+            #region getting a list of all parts and filling partslist with the recipes of parts needed from parent, saving parent as target
+            // Load recipes from Data/Recipes.json
+            var recipesJsonPath = Path.Combine("Data", "Recipes.json");
+            if (!File.Exists(recipesJsonPath))
+                throw new Exception($"Recipes data file not found at {recipesJsonPath}");
+
+            var recipesJson = File.ReadAllText(recipesJsonPath);
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            List<Recipe>? allRecipes = JsonSerializer.Deserialize<List<Recipe>>(recipesJson, jsonOptions);
+            if (allRecipes == null)
+                throw new Exception("Failed to parse recipes data");
+
+            // If there are no parts, skip
+            if (recipeAndAmount.Recipe.Parts != null)
+            {
+                foreach (var part in recipeAndAmount.Recipe.Parts)
+                {
+                    var partName = part.PartName;
+                    var partVersion = "default"; // use default when not provided
+
+                    var found = allRecipes.FirstOrDefault(r => r.Name == partName && r.Version == partVersion);
+                    if (found == null)
+                        throw new Exception($"recipe with name {partName} and version {partVersion} is unknown");
+
+                    parstList.Add(new(){
+                        Recipe=found,
+                        Target=$"{recipeAndAmount.Recipe.Name}_{recipeAndAmount.Recipe.Version}_final_machine{index}"
+                    });
+                }
+            }
+            #endregion
+
+            while(parstList.Count != 0){
+               Console.WriteLine(parstList);
+               parstList.Clear();
+            }
 
             index++;
         }
