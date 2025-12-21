@@ -2,7 +2,7 @@
   {
     "Name": "Iron Ingot",
     "Version": "default",
-    "Machine": "smelter",
+    "Machine": "Smelter",
     "Amount": {
       "Teller": 30,
       "Noemer": 1
