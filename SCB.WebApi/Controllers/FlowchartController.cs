@@ -1,4 +1,5 @@
 using FlowchartServices;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SCB.WebApi.FlowchartControllers;
@@ -7,35 +8,24 @@ namespace SCB.WebApi.FlowchartControllers;
 [ApiController]
 public class FlowchartController : ControllerBase
 {
-    // Just create service manually
     FlowChartService FlowChartService = new();
 
     [HttpPost(Name = "Calculate resources and amounts needed for given recipe(s)")]
     public ActionResult<FlowchartResult> CalculateRecipe([FromBody] CalculateRecipeRequest request)
     {
-        // Map amounts and recipes
-        var amounts = request.Items
-            .Select(x => x.Amount)
-            .ToList();
-
-        var recipes = request.Items
-            .Select(x => x.Recipe)
-            .ToList();
-
-        // foreach (var amount in amounts)
-        // {
-        //     Console.WriteLine($"WANTED AMOUNT: Integer: {amount.Integer}, Fraction: {amount.Fraction.Teller}/{amount.Fraction.Noemer}");
-        // }
-
-        // foreach (var recipe in recipes)
-        // {
-        //     Console.WriteLine($"RECIPE INFORMATION: Recipe: {recipe.Name}, Machine: {recipe.Machine}, Amount: {recipe.Amount.Teller}/{recipe.Amount.Noemer}");
-        // }
-
-        return new FlowchartResult()
+        if (request?.Items == null || request.Items.Count == 0) 
+            return NotFound("No recipes and or amounts are given");
+        
+        foreach(var item in request.Items)
         {
-            Nodes = new(),
-            Edges = new()
-        };
+            if(item.Amount.Integer < 0 || item.Amount.Fraction.Teller < 0 || item.Amount.Fraction.Noemer < 0)
+                return BadRequest("No negative recipe amounts are possible");
+            
+            if(item.Amount.Fraction.Noemer == 0 )
+                return BadRequest("Impossible to divide by zero");
+        }
+
+        return FlowChartService.calculateFlowChart(request);
+
     }
 }
