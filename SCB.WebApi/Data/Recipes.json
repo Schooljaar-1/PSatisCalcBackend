@@ -31,9 +31,9 @@
     "Image": "IronPlates",
     "Parts": [
       {
-        "PartName": "Iron Plate",
+        "PartName": "Iron Ingot",
         "Amount": {
-          "Teller": 20,
+          "Teller": 30,
           "Noemer": 1
         }
       }
