@@ -1,0 +1,82 @@
+[
+  {
+    "Name": "Iron Ingot",
+    "Version": "default",
+    "Machine": "Smelter",
+    "Amount": {
+      "Teller": 30,
+      "Noemer": 1
+    },
+    "Type": "item",
+    "Image": "IronIngot",
+    "Parts": [
+      {
+        "PartName": "Iron Ore",
+        "Amount": {
+          "Teller": 30,
+          "Noemer": 1
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Iron Plate",
+    "Version": "default",
+    "Machine": "Constructor",
+    "Amount": {
+      "Teller": 20,
+      "Noemer": 1
+    },
+    "Type": "item",
+    "Image": "IronPlates",
+    "Parts": [
+      {
+        "PartName": "Iron Ingot",
+        "Amount": {
+          "Teller": 30,
+          "Noemer": 1
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Iron Rod",
+    "Version": "default",
+    "Machine": "Constructor",
+    "Amount": {
+      "Teller": 15,
+      "Noemer": 1
+    },
+    "Type": "item",
+    "Image": "IronRods",
+    "Parts": [
+      {
+        "PartName": "Iron Ingot",
+        "Amount": {
+          "Teller": 15,
+          "Noemer": 1
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Iron Screw",
+    "Version": "default",
+    "Machine": "Constructor",
+    "Amount": {
+      "Teller": 40,
+      "Noemer": 1
+    },
+    "Type": "Item",
+    "Image": "IronScrews",
+    "Parts": [
+      {
+        "PartName": "Iron Rod",
+        "Amount": {
+          "Teller": 10,
+          "Noemer": 1
+        }
+      }
+    ]
+  }
+]
