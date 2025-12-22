@@ -30,6 +30,7 @@ public class FlowchartResult
 {
     public required List<Node> Nodes {get; set;}
     public required List<Edge> Edges {get; set;}
+    public required float Wattage {get; set;}
 }
 
 public class PartsAndTargets
