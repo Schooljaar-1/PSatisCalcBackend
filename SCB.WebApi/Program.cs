@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") 
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000") //Added port 3000 for docker container as described in docker compose file
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -31,6 +31,8 @@ app.UseCors("AllowReactFrontend");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllers();
 
